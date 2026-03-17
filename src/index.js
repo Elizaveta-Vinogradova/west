@@ -59,6 +59,21 @@ function isDog(card) {
     return card instanceof Dog;
 }
 
+class Trasher extends Dog{
+    constructor(name="Громила", maxPower = 5) {
+        super(name, maxPower);
+    }
+
+    modifyTakenDamage(value, toCard, gameContext, continuation) {
+        if (value === 2){
+            this.view.signalAbility(() => {
+                this.view.signalAbility(()=> continuation(value - 1))
+            })
+            return;
+        }
+        continuation(value - 1);
+    }
+}
 
 // Основа для утки.
 // function Duck() {
@@ -77,11 +92,10 @@ const seriffStartDeck = [
     new Duck(),
     new Duck(),
     new Duck(),
+    new Duck(),
 ];
-
-// Колода Бандита, верхнего игрока.
 const banditStartDeck = [
-    new Dog(),
+    new Trasher(),
 ];
 
 
