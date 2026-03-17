@@ -1,6 +1,7 @@
 import Game from './Game.js';
 import SpeedRate from './SpeedRate.js';
 import Card from "./Card.js";
+import TaskQueue from "./TaskQueue.js";
 
 
 // Дает описание существа по схожести с утками и собаками
@@ -49,6 +50,30 @@ class Dog extends Creature
     }
 }
 
+class Gatling extends Creature {
+    constructor(name = "Гатлинг", power = 6) {
+        super(name, power);
+    }
+
+    attack(gameContext, continuation) {
+        const taskQueue = new TaskQueue();
+        const {currentPlayer, oppositePlayer, position, updateView} = gameContext;
+
+        for (let position = 0; position < oppositePlayer.table.length; position++) {
+            taskQueue.push(onDone => this.view.showAttack(onDone));
+            taskQueue.push(onDone => {
+                const card = oppositePlayer.table[position];
+                if (card) {
+                    this.dealDamageToCreature(2, card, gameContext, onDone);
+                } else {
+                    this.dealDamageToPlayer(this.maxPower, gameContext, onDone);
+                }
+            });
+        }
+
+        taskQueue.continueWith(continuation);
+    }
+}
 // Отвечает является ли карта уткой.
 function isDuck(card) {
     return card instanceof Duck;
@@ -89,15 +114,13 @@ class Trasher extends Dog{
 
 // Колода Шерифа, нижнего игрока.
 const seriffStartDeck = [
-    new Duck(),
-    new Duck(),
-    new Duck(),
-    new Duck(),
+    new Gatling(),
 ];
 const banditStartDeck = [
     new Trasher(),
+    new Dog(),
+    new Dog(),
 ];
-
 
 // Создание игры.
 const game = new Game(seriffStartDeck, banditStartDeck);
