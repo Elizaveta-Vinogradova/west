@@ -1,5 +1,3 @@
-export default TaskQueue;
-
 function runNextTask(taskQueue) {
     if (taskQueue.running || taskQueue.tasks.length === 0) {
         return;
@@ -20,10 +18,12 @@ function runNextTask(taskQueue) {
         }, 0);
     }
     else {
+        taskQueue.running = false;
         runNextTask(taskQueue);
     }
 }
 
+export default TaskQueue;
 class TaskQueue{
     constructor() {
         this.tasks = [];
