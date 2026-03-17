@@ -74,6 +74,57 @@ class Gatling extends Creature {
         taskQueue.continueWith(continuation);
     }
 }
+
+class Lad extends Dog {
+    constructor(name = "Браток", power = 2) {
+        super(name, power);
+    }
+
+    static getInGameCount() {
+        return this.getInGameCount || 0;
+    }
+
+    static setInGameCount(value) {
+        this.getInGameCount = value;
+    }
+
+    doAfterComingIntoPlay(gameContext, continuation) {
+        Lad.setInGameCount(Lad.getInGameCount() + 1);
+        continuation();
+    }
+
+    doBeforeRemoving(gameContext, continuation) {
+        Lad.setInGameCount(Lad.getInGameCount() - 1);
+        continuation();
+    }
+
+    static getBonus(){
+        return this.getInGameCount() * (this.getInGameCount() + 1) / 2;
+    }
+
+    modifyDealedDamageToCreature(value, toCard, gameContext, continuation) {
+        const bonus = Lad.getBonus();
+        this.view.signalAbility(() => {
+            continuation(value + bonus);
+        });
+    }
+
+    modifyTakenDamage(value, toCard, gameContext, continuation) {
+        const bonus = Lad.getBonus();
+        this.view.signalAbility(() => {
+            continuation(value - bonus);
+        });
+    }
+
+    getDescriptions() {
+        let descriptions = [];
+        if (Lad.prototype.hasOwnProperty('modifyDealedDamageToCreature') ||
+            Lad.prototype.hasOwnProperty('modifyTakenDamage')) {
+            descriptions.push('Чем их больше, тем они сильнее');
+        }
+        return [...descriptions, ...super.getDescriptions()];
+    }
+}
 // Отвечает является ли карта уткой.
 function isDuck(card) {
     return card instanceof Duck;
@@ -118,7 +169,7 @@ const seriffStartDeck = [
 ];
 const banditStartDeck = [
     new Trasher(),
-    new Dog(),
+    new Lad(),
     new Dog(),
 ];
 
