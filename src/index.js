@@ -1,9 +1,8 @@
-import Card from './Card.js';
 import Game from './Game.js';
-import TaskQueue from './TaskQueue.js';
+import Creature from './Creature.js';
 import SpeedRate from './SpeedRate.js';
 
-class Duck extends Card
+class Duck extends Creature
 {
     constructor() {
         super('Мирная утка', 2, 'images/sheriff.png');
@@ -18,7 +17,7 @@ class Duck extends Card
     }
 }
 
-class Dog extends Card
+class Dog extends Creature
 {
     constructor() {
         super('Пес-бандит', 3, 'images/bandit.png');
@@ -36,7 +35,7 @@ function isDog(card) {
 }
 
 // Дает описание существа по схожести с утками и собаками
-function getCreatureDescription(card) {
+export function getCreatureDescription(card) {
     if (isDuck(card) && isDog(card)) {
         return 'Утка-Собака';
     }
