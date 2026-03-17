@@ -6,7 +6,7 @@ import SpeedRate from './SpeedRate.js';
 class Duck extends Card
 {
     constructor() {
-        super('Мирная утка', 2, 'images/bandit.png');
+        super('Мирная утка', 2, 'images/sheriff.png');
     }
 
     quacks() {
@@ -21,7 +21,7 @@ class Duck extends Card
 class Dog extends Card
 {
     constructor() {
-        super('Пес-бандит', 3, 'images/sheriff.png');
+        super('Пес-бандит', 3, 'images/bandit.png');
     }
 }
 
