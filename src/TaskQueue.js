@@ -18,13 +18,11 @@ function runNextTask(taskQueue) {
         }, 0);
     }
     else {
-        taskQueue.running = false;
         runNextTask(taskQueue);
     }
 }
 
-export default TaskQueue;
-class TaskQueue{
+export default class TaskQueue{
     constructor() {
         this.tasks = [];
         this.running = false;
