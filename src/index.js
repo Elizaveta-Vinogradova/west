@@ -1,6 +1,6 @@
 import Game from './Game.js';
 import SpeedRate from './SpeedRate.js';
-import Card from "./Card";
+import Card from "./Card.js";
 
 
 // Дает описание существа по схожести с утками и собаками
